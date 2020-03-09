@@ -1,17 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MessageList from './components/message-list'
+import MessageBoard from './components/message-board'
 
-const NewApp = require('./components/message-list').default
+const NewApp = require('./components/message-board').default
 
 function renderApp(App) {
   ReactDOM.render(<App />, document.getElementById('root'))
 }
 
-renderApp(MessageList)
+renderApp(MessageBoard)
 
 if (module.hot) {
-  module.hot.accept('./components/message-list', () => {
+  module.hot.accept('./components/message-board', () => {
     renderApp(NewApp)
   })
 }
