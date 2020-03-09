@@ -2,17 +2,17 @@ import React from 'react'
 import { Grid, Typography } from '@material-ui/core'
 import Message from './message'
 
-const MessageList = ({ stream, handleMessage}) => (
+const MessageList = ({messages, msgCustomize , handleMessage}) => (  
   <div>
-    <Typography variant="subtitle2">{stream.length ? stream[0].msgType : 'Message Type #'}</Typography>
-    <Typography variant="body2">Count {stream.length}</Typography>
+    <Typography variant="subtitle2">{msgCustomize.columnTitle}</Typography>
+    <Typography variant="body2">Count {messages.length}</Typography>
     <Grid container direction="column" spacing={2}>
-      {stream.map((data, idx) => (        
+      {messages.map((data, idx) => (        
         <Grid item key={idx}>
          <Message 
-          data={data} 
+          data={data}
           handleMessage={handleMessage}
-          msgClass={data.msgStyle}/>
+          msgClass={msgCustomize.msgStyle}/>
         </Grid>         
       ))
       }

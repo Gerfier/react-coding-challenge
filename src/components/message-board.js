@@ -1,19 +1,19 @@
 import React from 'react'
-import { Button, Box, Grid, styled} from '@material-ui/core'
+import { Button, Box, Container, Grid, styled} from '@material-ui/core'
 import Api from '../api'
 import MessageList from './message-list'
+import MessageSnackBar from './message-snackbar'
 
 const StyledButton = styled(Button)({
   backgroundColor: 'aquamarine',
   color: 'black',
   height: 30,
   padding: '0 22px',
-  marginRight: '5px',
-  marginTop: '7px',
+  margin: '7px 5px 62px 0',
 })
 
 const Header = styled('div')({
-  height: '40px', 
+  height: '65px', 
   borderBottom: '1px solid gray',
 })
 
@@ -21,7 +21,7 @@ const Subtitle = styled('div')({
   marginLeft: '15px',
   fontWeight: 'bold',
   position: 'relative',
-  top: '7px',
+  top: '29px',
   fontFamily: 'Roboto',
 })
 
@@ -30,7 +30,7 @@ class MessageBoard extends React.PureComponent {
     super(...args)
     this.state = {
       messages: [],
-      errorMsg: null,
+      errorMsg: false,
     }
   }
 
@@ -40,7 +40,7 @@ class MessageBoard extends React.PureComponent {
     },
   })
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.api.start()
   }
 
@@ -51,7 +51,8 @@ class MessageBoard extends React.PureComponent {
         ...messages.slice(),
         message,
       ],
-    })
+      errorMsg: message.priority === 1
+    });
   }
 
   //Toggle button for start/stop
@@ -66,7 +67,7 @@ class MessageBoard extends React.PureComponent {
   }
 
   handleClearAll = () => {
-      this.setState({ messages: [], errorMsg: null})
+      this.setState({ messages: []})
   }
 
   handleMessage = (message) => {
@@ -76,41 +77,33 @@ class MessageBoard extends React.PureComponent {
   }
 
   render() {
-    const { messages, errorMsg } = this.state;
+    const { messages } = this.state;
     const isApiStarted = this.api.isStarted()
-    let messageList = {};
 
-    //Generate messageList data structure to group messages data
-    const msgArray = messages.map( msg => {        
-          switch(msg.priority){
-          case 1:
-            messageList = {
-              msgType: 'Error Type 1',
-              msgStyle: { backgroundColor: '#F56236' }}         
-            break;
-          case 2: 
-            messageList = {
-              msgType: 'Warning Type 2',
-              msgStyle: { backgroundColor: '#FCE788' }}            
-            break;
-          case 3: 
-            messageList = {
-              msgType: 'Info Type 3',
-              msgStyle: { backgroundColor: '#88FCA3' }}           
-            break;
-          default:
-            messageList = {
-              msgType: 'Info Type 3',
-              msgStyle: { backgroundColor: '#88FCA3' }}           
-            break;
-      }
-      messageList.stream = msg;
-      return messageList
-    })    
+    //Group messages styling and additional data by priority
+    const msgCustomize = {
+      1: {
+          columnTitle: 'Error Type 1',
+          msgStyle: { backgroundColor: '#F56236' }
+      }, 
+      2: {
+          columnTitle: 'Warning Type 2',
+          msgStyle: { backgroundColor: '#FCE788' }
+      }, 
+      3: {
+          columnTitle: 'Info Type 2',
+          msgStyle: { backgroundColor: '#88FCA3' }
+      }};
+    const errors = messages.filter(error => error.priority === 1);
     return (
       <div>
         <Header>
           <Subtitle>Help.com Coding Challenge</Subtitle>
+          <MessageSnackBar 
+              messages={errors} 
+              errorMsg={this.state.errorMsg}
+              customize={msgCustomize[1]}
+              />
         </Header>
         <Box display="flex" alignItems="center" justifyContent="center">
           <StyledButton
@@ -126,20 +119,22 @@ class MessageBoard extends React.PureComponent {
             CLEAR
           </StyledButton>
         </Box>      
-        <Box p={7}>
+        <Container maxWidth="md">
           <Grid container direction='row' spacing={2}>
            {[1,2,3].map((priority, idx) => {
-            const data = msgArray.filter( msg => msg.stream.priority === priority);                     
-            console.log('data ', data);
+             //filtered out based on priority
+            const data = messages.filter( msg => msg.priority === priority);                                 
+            //Reverse array below to display latest message at the top
             return (
-                  <Grid item key={idx} md={4} sm={12} xs={12}>
-                    <MessageList stream={data ? data : []} 
+                  <Grid item key={idx} md={4} sm={12} xs={12}>                    
+                    <MessageList messages={data ? data.reverse() : []}
+                                 msgCustomize={msgCustomize[priority]}                                    
                                  handleMessage={this.handleMessage}/>
                   </Grid>   
                 )                             
              })}
           </Grid>
-        </Box>
+        </Container>
       </div>
     )
   }

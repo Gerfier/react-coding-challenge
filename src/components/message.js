@@ -1,6 +1,6 @@
 import React from 'react'
 //import PropTypes from 'prop-types'
-import { Button, Paper, Box, Grid, Typography, makeStyles, withStyles } from '@material-ui/core'
+import { Button, Card, Box, Grid, Typography, makeStyles, withStyles } from '@material-ui/core'
 
 
 const useStyles = makeStyles({
@@ -20,22 +20,22 @@ const StyledButton = withStyles({
 const Message = ({data, handleMessage, msgClass}) => { 
 
     const handleClick = () => {  
-        handleMessage(data.stream)
+        handleMessage(data)
     }
     
     const styleClass = useStyles(msgClass)
     return(
-            <Paper elevation={4} className={`${styleClass.msg}`}>
+            <Card elevation={4} className={`${styleClass.msg}`}>
                <Box p={1}>                       
                    <Grid container justify="space-between">
-                       <Typography variant="body2">Notification</Typography>                   
+                        <Typography variant="body2">{data.message}</Typography>                   
                         <StyledButton                         
                         variant="contained" 
                         onClick={handleClick}
                         disableElevation>Clear</StyledButton>
                    </Grid>
                </Box>
-            </Paper>
+            </Card>
            )
 }
 
