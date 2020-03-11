@@ -16,14 +16,15 @@ const useStyles = makeStyles({
 
 const MessageSnackBar = ({messages, errorMsg, customize}) => {     
     const classes = useStyles(customize.msgStyle);
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
+    //Will handle display snackbar based on a boolean
     const handleDisplay = (display) => {        
         setOpen(display)       
     }; 
    
     useEffect(() => {
-            handleDisplay(!! messages.length && errorMsg) 
+           handleDisplay(!! messages.length && errorMsg) 
     },[messages, errorMsg])
 
 
@@ -32,6 +33,7 @@ const MessageSnackBar = ({messages, errorMsg, customize}) => {
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} 
             open={open}
             autoHideDuration={2000} 
+            id="error-snackbar"
             onClose={() => {handleDisplay(false)}}                
          >
          <Card className={`${classes.msg}`} elevation={4}>

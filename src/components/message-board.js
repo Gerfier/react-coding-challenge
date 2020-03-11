@@ -4,6 +4,9 @@ import Api from '../api'
 import MessageList from './message-list'
 import MessageSnackBar from './message-snackbar'
 
+/**
+ * MessageBoard - parent component.
+ */
 const StyledButton = styled(Button)({
   backgroundColor: 'aquamarine',
   color: 'black',
@@ -34,6 +37,7 @@ class MessageBoard extends React.PureComponent {
     }
   }
 
+
   api = new Api({
     messageCallback: (message) => {
       this.messageCallback(message)
@@ -51,6 +55,7 @@ class MessageBoard extends React.PureComponent {
         ...messages.slice(),
         message,
       ],
+      //if an error message comes set errorMsg to true to display snackbar
       errorMsg: message.priority === 1
     });
   }
@@ -70,7 +75,8 @@ class MessageBoard extends React.PureComponent {
       this.setState({ messages: []})
   }
 
-  handleMessage = (message) => {
+  //Handle deleting a message
+  handleClearMessage = (message) => {
       const { messages } = this.state;
       const updatedList = messages.filter( msg => msg.id !== message.id );
       this.setState({ messages: updatedList});
@@ -120,16 +126,16 @@ class MessageBoard extends React.PureComponent {
           </StyledButton>
         </Box>      
         <Container maxWidth="md">
-          <Grid container direction='row' spacing={2}>
+          <Grid container direction='row' spacing={2}>          
            {[1,2,3].map((priority, idx) => {
-             //filtered out based on priority
+             //filtered out to display based on priority
             const data = messages.filter( msg => msg.priority === priority);                                 
             //Reverse array below to display latest message at the top
             return (
                   <Grid item key={idx} md={4} sm={12} xs={12}>                    
                     <MessageList messages={data ? data.reverse() : []}
                                  msgCustomize={msgCustomize[priority]}                                    
-                                 handleMessage={this.handleMessage}/>
+                                 handleMessage={this.handleClearMessage}/>
                   </Grid>   
                 )                             
              })}
