@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, fireEvent, getAllByText, getByRole  } from '@testing-library/react'
+import { render, fireEvent, getAllByText  } from '@testing-library/react'
 import MessageSnackBar from '../message-snackbar'
 
 
@@ -35,7 +35,7 @@ describe('message-snackbar', () => {
   it('detects button click on snackbar', () => {
     const { container } = render(<MessageSnackBar {...props}/>) 
     window.addEventListener = jest.fn();
-    const button = getByRole(container, 'button');     
+    const button = container.querySelector('button')    
     fireEvent.click(button);
     expect(window.addEventListener).toHaveBeenCalled();
   });
