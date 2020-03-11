@@ -1,5 +1,5 @@
 import React from 'react'
-//import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { Button, Card, Box, Grid, Typography, makeStyles, withStyles } from '@material-ui/core'
 
 
@@ -37,6 +37,17 @@ const Message = ({data, handleMessage, msgClass}) => {
                </Box>
             </Card>
            )
+}
+
+Message.propTypes = {
+    data: PropTypes.shape({
+        message: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
+        priority: PropTypes.number.isRequired
+    }),
+    msgClass: PropTypes.shape({
+        backgroundColor: PropTypes.string.isRequired
+    })
 }
 
 

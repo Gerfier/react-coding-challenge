@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Grid, Typography } from '@material-ui/core'
 import Message from './message'
 
@@ -19,5 +20,19 @@ const MessageList = ({messages, msgCustomize , handleMessage}) => {
             }
           </Grid>
         </div>
+}
+
+MessageList.propTypes = {
+  messages: PropTypes.arrayOf(PropTypes.shape({
+    message: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    priority: PropTypes.number.isRequired,
+  })),
+  msgCustomize: PropTypes.shape({
+    columnTitle: PropTypes.string.isRequired,
+    msgStyle: PropTypes.shape({
+      backgroundColor: PropTypes.string.isRequired
+    })
+  }) 
 }
 export default MessageList

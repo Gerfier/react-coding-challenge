@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-//import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { Card, Snackbar, Box, Grid, IconButton, makeStyles, Typography } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -18,7 +18,7 @@ const MessageSnackBar = ({messages, errorMsg, customize}) => {
     const classes = useStyles(customize.msgStyle);
     const [open, setOpen] = useState(false);
 
-    //Will handle display snackbar based on a boolean
+    //Will handle display snackbar based on a boolean flag
     const handleDisplay = (display) => {        
         setOpen(display)       
     }; 
@@ -54,6 +54,15 @@ const MessageSnackBar = ({messages, errorMsg, customize}) => {
          </Card>                 
         </Snackbar>
            )
+}
+
+MessageSnackBar.propTypes = {
+    messages: PropTypes.arrayOf(PropTypes.shape({
+        message: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
+        priority: PropTypes.number.isRequired,
+    })),
+    errorMsg: PropTypes.bool
 }
 
 
